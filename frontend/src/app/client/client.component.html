@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+
+<div class="container mb-5 mt-5">
+  <h4>Izmena podataka</h4>
+
+  <div class="row">
+    <div class="col-md-6">
+      <form #changeForm="ngForm">
+        <label for="firstname" class="form-label">Ime:</label>
+        <input type="text" id="firstname" name="firstname" #Firstname="ngModel"
+          [class.is-invalid]="Firstname.invalid && Firstname.touched" [(ngModel)]="firstname" class="form-control" required>
+        <small class="text-danger d-block" [class.d-none]="Firstname.valid || Firstname.untouched">Ovo polje je obavezno.</small>
+        <label for="lastname" class="form-label">Prezime:</label>
+        <input type="text" id="lastname" name="lastname" #Lastname="ngModel"
+          [class.is-invalid]="Lastname.invalid && Lastname.touched" [(ngModel)]="lastname" class="form-control" required>
+        <small class="text-danger d-block" [class.d-none]="Lastname.valid || Lastname.untouched">Ovo polje je obavezno.</small>
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" #Email="ngModel"
+          [class.is-invalid]="Email.invalid && Email.touched" [(ngModel)]="email" class="form-control"
+          pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+        <div *ngIf="Email.errors && (Email.invalid && Email.touched) ">
+          <small class="text-danger" *ngIf="Email.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Email.errors['pattern']">Nije validan format mejla.</small>
+        </div>
+        <label for="phone" class="form-label">Broj Telefona:</label>
+        <input type="text" id="phone" name="phone" #Phone="ngModel"
+          [class.is-invalid]="Phone.invalid && Phone.touched" [(ngModel)]="phone" class="form-control"
+          pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+        <div *ngIf="Phone.errors && (Phone.invalid && Phone.touched) ">
+          <small class="text-danger" *ngIf="Phone.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Phone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+        </div>
+        <input type="submit" value="Izmeni podatke" [disabled]="changeForm.form.invalid || changeForm.form.pristine || changeForm.submitted" (click)="changeData()" class="btn btn-primary mt-2">
+        <small class="text-success d-block" *ngIf="dataChange">Uspešna izmena podataka!</small>
+        <small class="text-danger d-block" *ngIf="dataChangeFail">Greška pri izmeni podataka!</small>
+      </form>
+
+      <hr>
+      <h4>Izmena Lozinke</h4>
+      <form #passForm = "ngForm">
+        <label for="password" class="form-label">Lozinka:</label>
+        <input type="password" name="password" [(ngModel)]="password" class="form-control">
+        <label for="newPassword" class="form-label">Nova Lozinka:</label>
+        <input type="password" id="newPassword" name="newPassword" #newPass="ngModel"
+          [class.is-invalid]="newPass.invalid && newPass.touched" [(ngModel)]="newPassword" class="form-control"
+          pattern="^(?=[A-Za-z]*?[A-Za-z])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{7,12}$" required>
+          <div *ngIf="newPass.errors && (newPass.invalid && newPass.touched)">
+            <small class="text-danger" *ngIf="newPass.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="newPass.errors['pattern']">Lozinka mora imati izmedju 7 i 12 karaktera,
+              jedno veliko slovo, jednu cifru i jedan specijalan karakter i mora pocinjati slovom.</small>
+          </div>
+        <label for="confirm" class="form-label">Ponovi Lozinku:</label>
+        <input type="password" id="confirm" name="confirm" #Confirm="ngModel"
+          [class.is-invalid]="(Confirm.value != newPass.value) && Confirm.touched" [(ngModel)]="confirm" class="form-control">
+        <small class="text-danger d-block" [class.d-none]="(Confirm.value == newPass.value) || Confirm.untouched">Lozinke se ne poklapaju.</small>
+
+        <input [disabled]="passForm.form.invalid || Confirm.value != newPass.value || passForm.submitted" type="submit" value="Izmeni lozinku" (click)="changePass()" class="btn btn-primary mt-2">
+        <small class="text-success d-block" *ngIf="passChange">{{passChangeText}}</small>
+        <small class="text-danger d-block" *ngIf="passChangeFail">{{passChangeText}}</small>
+      </form>
+    </div>
+    <div class="col-md-6 d-flex flex-column align-items-center">
+        <h4 class="text-center">Trenutna Profilna Ikonica</h4>
+        <img [src]="'http://localhost:4000/images/' + logged.img" class="rounded" alt="Slika nije pronađena">
+        <label for="profile_pic" class="form-label mt-2">Nova Profilna Ikonica:</label>
+        <input type="file" id="profile_pic" [class.is-invalid]="badChosen" name="profile_pic" accept=".png, .jpg, .jpeg" (input)="fileChosen($event)" class="form-control w-50">
+        <small class="text-danger w-50" *ngIf="badChosen">Slika mora biti velicine 100x100px - 300x300px.</small>
+        <button [disabled]="badChosen || !img" class="btn btn-primary mt-3" (click)="changeImg()">Izmenite Profilnu Ikonicu</button>
+        <small class="text-success d-block" *ngIf="imgChange">{{imgChangeText}}</small>
+        <small class="text-danger d-block" *ngIf="imgChangeFail">{{imgChangeText}}</small>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

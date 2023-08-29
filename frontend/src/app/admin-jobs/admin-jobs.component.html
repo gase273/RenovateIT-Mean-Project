@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+
+<div class="containter-fluid my-2" *ngIf="!isLoading">
+  <div class="row table-responsive">
+    <div class="col">
+      <table class="table table-dark" *ngIf="allJobs.length != 0">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">ID Objekta</th>
+            <th scope="col">Agencija</th>
+            <th scope="col">Klijent</th>
+            <th scope="col">Cena</th>
+            <th scope="col">Status</th>
+            <th scope="col" colspan="2">Opcije</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let j of allJobs; let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{j.buildId}}</td>
+            <td>{{j.agency}}</td>
+            <td>{{j.client}}</td>
+            <td>{{j.price}}</td>
+            <td [class.text-danger]="j.status == 'reqRefuse'" [class.text-success]="j.status == 'reqAccept'">{{j.status == "request" ? "Zahtev za saradnju poslat" : j.status == "reqRefuse" ? "Zahtev odbijen" :
+                j.status == "reqAccept" ? "Ponuda poslata" : j.status == "working" || j.status == "agenFinished" ? "Posao u toku" : j.status == "finished" ? "Posao gotov" : "Posao otkazan"}}</td>
+            <td>
+              <button class="btn btn-outline-info" (click)="goToJobDetails(j.jobId)">Pregled</button>
+            </td>
+            <td>
+              <button class="btn btn-outline-danger" (click)="delJob(j.jobId)">Obriši</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <h5 class="text-center" *ngIf="allJobs.length == 0">Nemate nijedan posao.</h5>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

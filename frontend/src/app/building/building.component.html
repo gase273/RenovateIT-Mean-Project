@@ -1,0 +1,34 @@
+<app-navbar></app-navbar>
+<div class="container-fluid mt-2" *ngIf="!isLoading">
+  <h3 class="text-center mb-3 display-6">{{greeting}}</h3>
+  <div class="row table-responsive">
+    <div class="col">
+      <table class="table table-dark" *ngIf="clientBuildings">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">Tip Objekta</th>
+            <th scope="col">Adresa</th>
+            <th scope="col">Kvadratura</th>
+            <th scope="col">Broj prostorija</th>
+            <th scope="col" colspan="2">Opcije</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let b of clientBuildings; let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{b.type == "apartment" ? "Stan" : "Kuća"}}</td>
+            <td>{{b.address}}</td>
+            <td>{{b.squares}}</td>
+            <td>{{b.rooms.length}}</td>
+            <td><button class="btn btn-outline-info" (click)="goToEdit(b.buildId)" [disabled]="b.rooms[0].color != 'white'">Izmeni</button></td>
+            <td><button class="btn btn-outline-danger" (click)="delete(b.buildId)" [disabled]="b.rooms[0].color != 'white'">Obriši</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="text-center"><a class="lead" routerLink="/addBuilding">Dodaj nov objekat</a></p>
+</div>
+
+<app-footer></app-footer>

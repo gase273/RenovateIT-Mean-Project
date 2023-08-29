@@ -1,0 +1,56 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid my-2" *ngIf="!isLoading">
+
+  <div class="row">
+    <div class="col">
+      <h3 class="text-center display-6">Detalji Agencije</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col text-center">
+      <img [src]="'http://localhost:4000/images/' + agency.img" class="rounded" width="150" height="150">
+    </div>
+    <div class="col align-self-center">
+      <h4>Naziv:&emsp;{{agency.agencyName}}</h4>
+      <h4>Adresa:&emsp;{{agency.address}}</h4>
+      <h4>PIB:&emsp;{{agency.pib}}</h4>
+    </div>
+    <div class="col align-self-center">
+      <h4>Opis:</h4>
+      <h5>{{agency.desc}}</h5>
+    </div>
+    <div class="col-sm-2 align-self-center" *ngIf="logged">
+      <button class="btn btn-outline-success" (click)="goToRequest()">Zatraži Saradnju</button>
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <div class="col">
+      <h4 class="text-center my-2 display-6">Recenzije Agencije</h4>
+      <h5 class="text-center" *ngIf="agency.reviews.length == 0">Ova agencija nema nijednu recenziju.</h5>
+      <table class="table table-dark" *ngIf="agency.reviews.length != 0">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">Korisničko ime</th>
+            <th scope="col">Ocena</th>
+            <th scope="col">Komentar</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let r of agency.reviews let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{logged ? r.username : "Anoniman korisnik"}}</td>
+            <td>{{r.rating}}</td>
+            <td>{{r.comment}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>

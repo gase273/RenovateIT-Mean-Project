@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+<div class="container-fluid my-2" *ngIf="!isLoading">
+  <div class="row mt-2 mb-3">
+    <div class="col-md-7 align-self-center">
+      <h3 class="text-center display-6">Agencije za renoviranje</h3>
+    </div>
+    <div class="col-md-3 align-self-center">
+      <div class="input-group">
+        <input type="search" class="form-control" placeholder="Pretraži Agencije" [(ngModel)]="text">
+        <button type="button" class="btn btn-outline-info" [class.disabled]="!name && !address" (click)="search()">Pretraži</button>
+      </div>
+    </div>
+    <div class="col-md-1 align-self-center">
+      <div class="form-check form-switch align-self-center">
+        <input class="form-check-input" type="checkbox" id="agencyName" [(ngModel)]="name">
+        <label class="form-check-label" for="agencyName">Po nazivu</label>
+      </div>
+      <div class="form-check form-switch align-self-center">
+        <input class="form-check-input" type="checkbox" id="agencyAddress" [(ngModel)]="address">
+        <label class="form-check-label" for="agencyAddress">Po adresi</label>
+      </div>
+    </div>
+    <div class="col-md-1 align-self-center">
+      <div class="form-check form-switch align-self-center">
+        <input class="form-check-input" type="radio" id="asc" name="order" [(ngModel)]="order" value="asc" (click)="changeSelect($event)">
+        <label class="form-check-label" for="asc">Rastuće</label>
+      </div>
+      <div class="form-check form-switch align-self-center">
+        <input class="form-check-input" type="radio" id="desc" name="order" [(ngModel)]="order" value="desc" (click)="changeSelect($event)">
+        <label class="form-check-label" for="desc">Opadajuće</label>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <table class="table table-dark">
+        <tbody class="text-center">
+          <tr *ngFor="let a of allAgencies" class="align-middle">
+            <td>
+              <img [src]="'http://localhost:4000/images/' + a.img" class="rounded rounded-circle" width="50" height="50">
+            </td>
+            <td>{{a.agencyName}}</td>
+            <td>{{a.desc}}</td>
+            <td><button class="btn btn-outline-info" (click)="goToDetails(a.username)">Detalji</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<app-footer></app-footer>

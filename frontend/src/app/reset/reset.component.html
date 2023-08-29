@@ -1,0 +1,18 @@
+<app-navbar></app-navbar>
+
+<div class="w-50 mx-auto my-5">
+  <h2>Zaboravljena lozinka</h2>
+  <label for="email" class="form-label">Email:</label>
+  <input type="email" id="email" name="email" #Email="ngModel"
+    [class.is-invalid]="Email.invalid && Email.touched" [(ngModel)]="email" class="form-control"
+    pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+  <div *ngIf="Email.errors && (Email.invalid && Email.touched) ">
+    <small class="text-danger" *ngIf="Email.errors['required']">Ovo polje je obavezno.</small>
+    <small class="text-danger" *ngIf="Email.errors['pattern']">Nije validan format mejla.</small>
+  </div>
+  <button class="btn btn-primary mt-2" (click)="reset()">Resetujte Lozinku</button>
+  <small class="text-success d-block" *ngIf="success">Lozinka promenjena, proverite Vaš mejl!</small>
+  <small class="text-danger d-block" *ngIf="fail">Greška pri resetovanju!</small>
+</div>
+
+<app-footer></app-footer>

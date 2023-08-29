@@ -1,0 +1,259 @@
+<app-navbar></app-navbar>
+
+<div class="container mb-5 mt-5" *ngIf="!isLoading">
+  <h3 class="display-6">Izmena podataka</h3>
+
+  <div class="row">
+    <div class="col-md-6" *ngIf="user.type == 1">
+      <form #changeAgencyForm="ngForm">
+        <label for="agencyname" class="form-label">Ime Agencije:</label>
+        <input type="text" id="agencyname" name="agencyname" #Agencyname="ngModel"
+          [class.is-invalid]="Agencyname.invalid && Agencyname.touched" [(ngModel)]="agencyName" class="form-control" required>
+        <small class="text-danger" [class.d-none]="Agencyname.valid || Agencyname.untouched">Ovo polje je obavezno.</small>
+        <label for="address" class="form-label">Adresa:</label>
+        <input type="text" id="address" name="address" #Address="ngModel"
+          [class.is-invalid]="Address.invalid && Address.touched" [(ngModel)]="address" class="form-control" required>
+        <small class="text-danger" [class.d-none]="Address.valid || Address.untouched">Ovo polje je obavezno.</small>
+        <label for="desc" class="form-label">Opis:</label>
+        <textarea id="desc" name="desc" #Desc="ngModel"
+          [class.is-invalid]="Desc.invalid && Desc.touched" [(ngModel)]="desc" class="form-control" rows="3" required></textarea>
+        <small class="text-danger" [class.d-none]="Desc.valid || Desc.untouched">Ovo polje je obavezno.</small>
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" #Email="ngModel"
+          [class.is-invalid]="Email.invalid && Email.touched" [(ngModel)]="email" class="form-control"
+          pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+        <div *ngIf="Email.errors && (Email.invalid && Email.touched) ">
+          <small class="text-danger" *ngIf="Email.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Email.errors['pattern']">Nije validan format mejla.</small>
+        </div>
+        <label for="phone" class="form-label">Broj Telefona:</label>
+        <input type="text" id="phone" name="phone" #Phone="ngModel"
+          [class.is-invalid]="Phone.invalid && Phone.touched" [(ngModel)]="phone" class="form-control"
+          pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+        <div *ngIf="Phone.errors && (Phone.invalid && Phone.touched) ">
+          <small class="text-danger" *ngIf="Phone.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Phone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+        </div>
+        <input type="submit" value="Izmeni podatke" [disabled]="changeAgencyForm.form.invalid || changeAgencyForm.form.pristine || changeAgencyForm.submitted" (click)="changeAgencyData()" class="btn btn-primary mt-2">
+        <small class="text-success d-block" *ngIf="dataChange">Uspešna izmena podataka!</small>
+        <small class="text-danger d-block" *ngIf="dataChangeFail">Greška pri izmeni podataka!</small>
+      </form>
+    </div>
+    <div class="col-md-6" *ngIf="user.type == 0">
+      <form #changeUserForm="ngForm">
+        <label for="firstname" class="form-label">Ime:</label>
+        <input type="text" id="firstname" name="firstname" #Firstname="ngModel"
+          [class.is-invalid]="Firstname.invalid && Firstname.touched" [(ngModel)]="firstname" class="form-control" required>
+        <small class="text-danger d-block" [class.d-none]="Firstname.valid || Firstname.untouched">Ovo polje je obavezno.</small>
+        <label for="lastname" class="form-label">Prezime:</label>
+        <input type="text" id="lastname" name="lastname" #Lastname="ngModel"
+          [class.is-invalid]="Lastname.invalid && Lastname.touched" [(ngModel)]="lastname" class="form-control" required>
+        <small class="text-danger d-block" [class.d-none]="Lastname.valid || Lastname.untouched">Ovo polje je obavezno.</small>
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" #Email="ngModel"
+          [class.is-invalid]="Email.invalid && Email.touched" [(ngModel)]="email" class="form-control"
+          pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+        <div *ngIf="Email.errors && (Email.invalid && Email.touched) ">
+          <small class="text-danger" *ngIf="Email.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Email.errors['pattern']">Nije validan format mejla.</small>
+        </div>
+        <label for="phone" class="form-label">Broj Telefona:</label>
+        <input type="text" id="phone" name="phone" #Phone="ngModel"
+          [class.is-invalid]="Phone.invalid && Phone.touched" [(ngModel)]="phone" class="form-control"
+          pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+        <div *ngIf="Phone.errors && (Phone.invalid && Phone.touched) ">
+          <small class="text-danger" *ngIf="Phone.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Phone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+        </div>
+        <input type="submit" value="Izmeni podatke" [disabled]="changeUserForm.form.invalid || changeUserForm.form.pristine || changeUserForm.submitted" (click)="changeClientData()" class="btn btn-primary mt-2">
+        <small class="text-success d-block" *ngIf="dataChange">Uspešna izmena podataka!</small>
+        <small class="text-danger d-block" *ngIf="dataChangeFail">Greška pri izmeni podataka!</small>
+      </form>
+    </div>
+    <div class="col-md-6 d-flex flex-column align-items-center">
+        <h4 class="text-center display-6">Trenutna Profilna Ikonica</h4>
+        <img [src]="'http://localhost:4000/images/' + user.img" class="rounded" alt="Slika nije pronađena">
+        <label for="profile_pic" class="form-label mt-2">Nova Profilna Ikonica:</label>
+        <input type="file" id="profile_pic" [class.is-invalid]="badChosen" name="profile_pic" accept=".png, .jpg, .jpeg" (input)="fileChosen($event)" class="form-control w-50">
+        <small class="text-danger w-50" *ngIf="badChosen">Slika mora biti velicine 100x100px - 300x300px.</small>
+        <button [disabled]="badChosen || !img" class="btn btn-primary mt-3" (click)="changeImg()">Izmenite Profilnu Ikonicu</button>
+        <small class="text-success d-block" *ngIf="imgChange">{{imgChangeText}}</small>
+        <small class="text-danger d-block" *ngIf="imgChangeFail">{{imgChangeText}}</small>
+        <br>
+        <div class="text-center" *ngIf="hasRequest">
+          <h5>Postoji zahtev za povećanje broja radnih mesta na: {{request.workerNum}}</h5>
+          <button class="btn btn-outline-success me-2"(click)="acceptRequest()">Prihvati zahtev</button>
+          <button class="btn btn-outline-danger ms-2" (click)="refuseRequest()">Odbij zahtev</button>
+        </div>
+    </div>
+  </div>
+  <br>
+  <hr>
+  <br>
+  <div class="row mt-2 mb-3" *ngIf="user.type == 1">
+    <div class="col-md-10 align-self-center">
+      <h3 class="text-center display-6">Svi Radnici Agencije</h3>
+    </div>
+    <div class="col-md-2 align-self-center text-center">
+      <button class="btn btn-primary my-1" data-toggle="modal" data-target="#addWorker">Dodaj Novog Radnika</button>
+    </div>
+  </div>
+  <div class="row table-responsive" *ngIf="user.type == 1">
+    <div class="col">
+      <table class="table table-dark" *ngIf="workers.length != 0">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Broj telefona</th>
+            <th scope="col">Struka</th>
+            <th scope="col">Na Poslu</th>
+            <th scope="col" colspan="2">Opcije</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let w of workers; let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{w.firstName}}</td>
+            <td>{{w.lastName}}</td>
+            <td>{{w.phone}}</td>
+            <td>{{w.specialty}}</td>
+            <td>{{w.workingOn == -1 ? "Ne" : "Da"}}</td>
+            <td><button class="btn btn-outline-info" data-toggle="modal" data-target="#editWorker" (click)="fill(i)">Ažuriraj</button></td>
+            <td><button class="btn btn-outline-danger" (click)="removeWorker(w.workerId)">Obriši</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <h5 class="text-center" *ngIf="workers.length == 0">Agencija nema nijednog radnika.</h5>
+    </div>
+  </div>
+  <div class="row my-5 table-responsive" *ngIf="user.type == 1">
+    <div class="col">
+      <h4 class="text-center my-2 display-6">Recenzije Agencije</h4>
+      <h5 class="text-center" *ngIf="user.reviews.length == 0">Ova agencija nema nijednu recenziju.</h5>
+      <table class="table table-dark" *ngIf="user.reviews.length != 0">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">Korisničko ime</th>
+            <th scope="col">Ocena</th>
+            <th scope="col">Komentar</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let r of user.reviews let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{logged ? r.username : "Anoniman korisnik"}}</td>
+            <td>{{r.rating}}</td>
+            <td>{{r.comment}}</td>
+            <td><button class="btn btn-outline-danger" (click)="delReview(r.jobId)">Obiši</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addWorker" tabindex="-1" role="dialog" aria-labelledby="addWorkerLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addWorkerLabel">Dodajte Radnika</h5>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #newForm="ngForm">
+          <label for="newFirstName" class="form-label">Ime:</label>
+          <input type="text" id="newFirstName" name="newFirstName" #NewFirstName="ngModel"
+            [class.is-invalid]="NewFirstName.invalid && NewFirstName.touched" [(ngModel)]="newFirstName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewFirstName.valid || NewFirstName.untouched">Ovo polje je obavezno.</small>
+          <label for="newLastName" class="form-label">Prezime:</label>
+          <input type="text" id="newLastName" name="newLastName" #NewLastName="ngModel"
+            [class.is-invalid]="NewLastName.invalid && NewLastName.touched" [(ngModel)]="newLastName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewLastName.valid || NewLastName.untouched">Ovo polje je obavezno.</small>
+          <label for="newEmail" class="form-label">Email:</label>
+          <input type="newEmail" id="newEmail" name="newEmail" #NewEmail="ngModel"
+            [class.is-invalid]="NewEmail.invalid && NewEmail.touched" [(ngModel)]="newEmail" class="form-control"
+            pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+          <div *ngIf="NewEmail.errors && (NewEmail.invalid && NewEmail.touched) ">
+            <small class="text-danger" *ngIf="NewEmail.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="NewEmail.errors['pattern']">Nije validan format mejla.</small>
+          </div>
+          <label for="newPhone" class="form-label">Broj Telefona:</label>
+          <input type="text" id="newPhone" name="newPhone" #NewPhone="ngModel"
+            [class.is-invalid]="NewPhone.invalid && NewPhone.touched" [(ngModel)]="newPhone" class="form-control"
+            pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+          <div *ngIf="NewPhone.errors && (NewPhone.invalid && NewPhone.touched) ">
+            <small class="text-danger" *ngIf="NewPhone.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="NewPhone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+          </div>
+          <label for="newSpecialty" class="form-label">Struka:</label>
+          <input type="text" id="newSpecialty" name="newSpecialty" #NewSpecialty="ngModel"
+            [class.is-invalid]="NewSpecialty.invalid && NewSpecialty.touched" [(ngModel)]="newSpecialty" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewSpecialty.valid || NewSpecialty.untouched">Ovo polje je obavezno.</small>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" [disabled]="newForm.form.invalid || newForm.submitted" (click)="addWorker(); newForm.resetForm()">Sačuvaj Radnika</button>
+        <small class="text-success d-block" *ngIf="newSuccess">Uspešno sačuvan radnik!</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editWorker" tabindex="-1" role="dialog" aria-labelledby="editWorkerLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editWorkerLabel">Izmeni Radnika</h5>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <label for="editFirstName" class="form-label">Ime:</label>
+          <input type="text" id="editFirstName" name="editFirstName" #EditFirstName="ngModel"
+            [class.is-invalid]="EditFirstName.invalid && EditFirstName.touched" [(ngModel)]="editFirstName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditFirstName.valid || EditFirstName.untouched">Ovo polje je obavezno.</small>
+          <label for="editLastName" class="form-label">Prezime:</label>
+          <input type="text" id="editLastName" name="editLastName" #EditLastName="ngModel"
+            [class.is-invalid]="EditLastName.invalid && EditLastName.touched" [(ngModel)]="editLastName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditLastName.valid || EditLastName.untouched">Ovo polje je obavezno.</small>
+          <label for="editEmail" class="form-label">Email:</label>
+          <input type="editEmail" id="editEmail" name="editEmail" #EditEmail="ngModel"
+            [class.is-invalid]="EditEmail.invalid && EditEmail.touched" [(ngModel)]="editEmail" class="form-control"
+            pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+          <div *ngIf="EditEmail.errors && (EditEmail.invalid && EditEmail.touched) ">
+            <small class="text-danger" *ngIf="EditEmail.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="EditEmail.errors['pattern']">Nije validan format mejla.</small>
+          </div>
+          <label for="editPhone" class="form-label">Broj Telefona:</label>
+          <input type="text" id="editPhone" name="editPhone" #EditPhone="ngModel"
+            [class.is-invalid]="EditPhone.invalid && EditPhone.touched" [(ngModel)]="editPhone" class="form-control"
+            pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+          <div *ngIf="EditPhone.errors && (EditPhone.invalid && EditPhone.touched) ">
+            <small class="text-danger" *ngIf="EditPhone.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="EditPhone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+          </div>
+          <label for="editSpecialty" class="form-label">Struka:</label>
+          <input type="text" id="editSpecialty" name="editSpecialty" #EditSpecialty="ngModel"
+            [class.is-invalid]="EditSpecialty.invalid && EditSpecialty.touched" [(ngModel)]="editSpecialty" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditSpecialty.valid || EditSpecialty.untouched">Ovo polje je obavezno.</small>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" [disabled]="editForm.form.invalid || editForm.form.pristine || editForm.submitted" (click)="editWorker()">Sačuvaj Radnika</button>
+        <small class="text-success d-block" *ngIf="editSuccess">Uspešno sačuvan radnik!</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

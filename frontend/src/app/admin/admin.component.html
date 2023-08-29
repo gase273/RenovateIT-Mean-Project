@@ -1,0 +1,46 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid my-2" *ngIf="!isLoading">
+  <div class="row">
+    <div class="col-md-8">
+      <h3 class="text-center display-6">Svi korisnici</h3>
+    </div>
+    <div class="col-md-2 align-self-center">
+      <p class="text-center"><a class="lead" routerLink="/addClient">Dodaj novog klijenta</a></p>
+    </div>
+    <div class="col-md-2 align-self-center">
+      <p class="text-center"><a class="lead" routerLink="/addAgency">Dodaj novu agenciju</a></p>
+    </div>
+  </div>
+  <div class="row table-responsive">
+    <div class="col">
+      <table class="table table-dark">
+        <thead class="text-center">
+          <tr>
+            <th scope="col">Ikonica</th>
+            <th scope="col">Korisničko ime</th>
+            <th scope="col">Tip</th>
+            <th scope="col">Status</th>
+            <th scope="col" colspan="4">Opcije</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let u of allUsers" class="align-middle">
+            <td>
+              <img [src]="'http://localhost:4000/images/' + u.img" class="rounded rounded-circle" width="50" height="50">
+            </td>
+            <td>{{u.username}}</td>
+            <td>{{u.type == 0 ? 'Klijent' : "Agencija"}}</td>
+            <td>{{u.status == "awaiting" ? "Zahtev za registraciju" : u.status == "accepted" ? "Prihvaćen" : "Odbijen"}}</td>
+            <td><button class="btn btn-info" (click)="goToDetails(u.username)">Detalji</button></td>
+            <td><button class="btn btn-outline-danger" (click)="del(u.username)">Obriši</button></td>
+            <td><button *ngIf="u.status == 'awaiting'" class="btn btn-outline-success" (click)="accept(u.username)">Prihvati</button></td>
+            <td><button *ngIf="u.status == 'awaiting'" class="btn btn-outline-danger" (click)="refuse(u.username)">Odbij</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

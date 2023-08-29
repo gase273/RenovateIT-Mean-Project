@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+<div class="container-fluid mt-3">
+
+  <div class="row mx-3">
+
+    <div class="col-md-4">
+      <h3 class="text-center mt-1">Izmena postojeceg objekta</h3>
+
+      <form #buildForm="ngForm">
+        <label for="type" class="form-label">Tip:</label>
+        <br>
+        <input type="radio" id="house" name="type" class="form-radio" #Type = "ngModel" [(ngModel)]="type" value="house">
+        <label for="house" class="form-label mx-1">Kuća</label>
+        <input type="radio" id="apartment" name="type" class="form-radio" #Type = "ngModel" [(ngModel)]="type" value="apartment">
+        <label for="apartment" class="form-label mx-1">Stan</label>
+        <br>
+
+        <label for="address" class="form-label mt-1">Adresa:</label>
+        <input type="text" id="address" name="address" class="form-control" #Address = "ngModel" [(ngModel)]="address" required>
+        <small class="text-danger d-block" [class.d-none]="Address.valid || Address.untouched">Ovo polje je obavezno.</small>
+
+        <label for="squares" class="form-label mt-1">Kvadratura:</label>
+        <input type="number" id="squares" name="squares" class="form-control" #Squares = "ngModel" [(ngModel)]="squares" required>
+        <small class="text-danger" [class.d-none]="Squares.valid || Squares.untouched">Ovo polje je obavezno.</small>
+        <small class="text-danger" [class.d-none]="Squares.invalid || squares > 0 || Squares.untouched">Kvadratura mora biti pozitivan broj.</small>
+
+      </form>
+
+        <hr>
+        <h3 class="text-center">Stvaranje elemenata skice</h3>
+
+        <label for="width" class="form-label mt-1">Širina:</label>
+        <input type="number" id="width" name="width" class="form-control" #Width = "ngModel" [(ngModel)]="width" required>
+        <small class="text-danger d-block" [class.d-none]="Width.valid || Width.untouched">Ovo polje je obavezno.</small>
+        <small class="text-danger d-block" [class.d-none]="Width.invalid || width > 0 || Width.untouched">Dimenzije moraju biti pozitivan broj.</small>
+
+        <label for="height" class="form-label mt-1">Visina:</label>
+        <input type="number" id="height" name="height" class="form-control" #Height = "ngModel" [(ngModel)]="height" required>
+        <small class="text-danger" [class.d-none]="Height.valid || Height.untouched">Ovo polje je obavezno.</small>
+        <small class="text-danger" [class.d-none]="Height.invalid || height > 0 || Height.untouched">Dimenzije moraju biti pozitivan broj.</small>
+
+        <div class="row gx-0">
+          <div class="col sm-1">
+            <button class="btn btn-primary my-1 mx-auto d-block" [disabled]="rooms.length >= 3 || width < 1 || height < 1" (click)="addRoom()">Kreiraj sobu</button>
+          </div>
+          <div class="col sm-1">
+            <button class="btn btn-primary my-1 mx-auto d-block" [disabled]="rooms.length == 0" (click)="addDoor()">Kreiraj vrata</button>
+          </div>
+          <div class="col sm-1">
+            <button class="btn btn-outline-danger my-1 mx-auto d-block" [disabled]="rooms.length == 0 && doors.length == 0" (click)="delAll()">Obriši skicu</button>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-md-5 px-0 d-flex flex-column align-items-center overflow-auto">
+      <h3>Skica</h3>
+      <canvas class="my-auto" #canvasElement width="640" height="480" [ngStyle]="{ 'background-color': 'white' }"
+        (mousemove)="handleMouseMove($event)"
+        (mousedown)="handleMouseDown($event)"
+        (mouseup)="handleMouseUp()">
+      </canvas>
+    </div>
+    <div class="col-md-3 d-flex flex-column align-items-center">
+      <h3 class="text-center mt-1">Uputstvo za crtanje skice:</h3>
+      <p class="text mt-5 pt-4 text-center">Unosom dimenzija sobe i klikom na dugme "Kreiraj sobu" stvara se soba koja je predstavljena kao pravo-ugaonik.
+        Odabirom sobe i klikom na dugme "Dodaj vrata" stvaraju se vrata koja se mogu postaviti na sobu koja je označena.
+        Skica je validna ako sve sobe dodiruju barem jednu drugu sobu i ako sva vrata dodiruju neku sobu.
+        Ako je skica validna, klikom na dugme "Sačuvaj objekat" Vaš objekat će se sačuvati u bazi podataka.</p>
+      <button class="btn btn-success" [disabled]="buildForm.invalid || !isValid || squares <= 0" (click)="editBuilding()">Sačuvaj objekat</button>
+      <small class="text-danger text-center d-block" *ngIf="saveFail">Greška pri čuvanju objekta!</small>
+      <small class="text-success text-center d-block" *ngIf="saveSuccess">Objekat uspešno sačuvan!</small>
+    </div>
+  </div>
+
+</div>
+
+<app-footer></app-footer>
+

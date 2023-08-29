@@ -1,0 +1,105 @@
+<app-navbar></app-navbar>
+
+<div class="container-fluid mb-5 mt-5 w-50">
+  <h2>Registracija Agencije</h2>
+  <form enctype="multipart/form-data" #agencyForm="ngForm">
+    <div class="form-group row mt-1">
+      <div class="col-md-6">
+        <label for="agencyname" class="form-label">Ime Agencije:</label>
+        <input type="text" id="agencyname" name="agencyname" #Agencyname="ngModel"
+          [class.is-invalid]="Agencyname.invalid && Agencyname.touched" [(ngModel)]="agencyName" class="form-control" required>
+        <small class="text-danger" [class.d-none]="Agencyname.valid || Agencyname.untouched">Ovo polje je obavezno.</small>
+      </div>
+      <div class="col-md-6">
+        <label for="username" class="form-label">Korisničko ime:</label>
+        <input type="text" id="username" name="username" #Username="ngModel"
+          [class.is-invalid]="Username.invalid && Username.touched" [(ngModel)]="username" class="form-control" required>
+        <small class="text-danger" [class.d-none]="Username.valid || Username.untouched">Ovo polje je obavezno.</small>
+      </div>
+    </div>
+
+    <div class="form-group row mt-1">
+      <div class="col-md-6">
+        <label for="password" class="form-label">Lozinka:</label>
+        <input type="password" id="password" name="password" #pass="ngModel"
+          [class.is-invalid]="pass.invalid && pass.touched" [(ngModel)]="password" class="form-control"
+          pattern="^(?=[A-Za-z]*?[A-Za-z])(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{7,12}$" required>
+        <div *ngIf="pass.errors && (pass.invalid && pass.touched)">
+          <small class="text-danger" *ngIf="pass.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="pass.errors['pattern']">Lozinka mora imati izmedju 7 i 12 karaktera,
+            jedno veliko slovo, jednu cifru i jedan specijalan karakter i mora pocinjati slovom.</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="confirm" class="form-label">Ponovi Lozinku:</label>
+        <input type="password" id="confirm" name="confirm" #Confirm="ngModel"
+          [class.is-invalid]="(Confirm.value != pass.value) && Confirm.touched" [(ngModel)]="confirm" class="form-control">
+        <small class="text-danger" [class.d-none]="(Confirm.value == pass.value) || Confirm.untouched">Lozinke se ne poklapaju.</small>
+      </div>
+    </div>
+
+    <div class="form-group row mt-1">
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" #Email="ngModel"
+          [class.is-invalid]="Email.invalid && Email.touched" [(ngModel)]="email" class="form-control"
+          pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+        <div *ngIf="Email.errors && (Email.invalid && Email.touched) ">
+          <small class="text-danger" *ngIf="Email.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Email.errors['pattern']">Nije validan format mejla.</small>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Broj Telefona:</label>
+        <input type="text" id="phone" name="phone" #Phone="ngModel"
+          [class.is-invalid]="Phone.invalid && Phone.touched" [(ngModel)]="phone" class="form-control"
+          pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+        <div *ngIf="Phone.errors && (Phone.invalid && Phone.touched) ">
+          <small class="text-danger" *ngIf="Phone.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Phone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mt-1">
+      <div class="col-md-6">
+        <label for="address" class="form-label">Adresa:</label>
+        <input type="text" id="address" name="address" #Address="ngModel"
+          [class.is-invalid]="Address.invalid && Address.touched" [(ngModel)]="address" class="form-control" required>
+        <small class="text-danger" [class.d-none]="Address.valid || Address.untouched">Ovo polje je obavezno.</small>
+      </div>
+      <div class="col-md-6">
+        <label for="pib" class="form-label">PIB:</label>
+        <input type="text" id="pib" name="pib" #Pib="ngModel"
+          [class.is-invalid]="Pib.invalid && Pib.touched" [(ngModel)]="pib" class="form-control" required
+          pattern="^\d{9,}$">
+        <div *ngIf="Pib.errors && (Pib.invalid && Pib.touched) ">
+          <small class="text-danger" *ngIf="Pib.errors['required']">Ovo polje je obavezno.</small>
+          <small class="text-danger" *ngIf="Pib.errors['pattern']">PIB sadrzi najmanje 9 cifara.</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row mt-1">
+      <div class="col">
+        <label for="desc" class="form-label">Opis:</label>
+        <textarea id="desc" name="desc" #Desc="ngModel"
+          [class.is-invalid]="Desc.invalid && Desc.touched" [(ngModel)]="desc" class="form-control" rows="3" required></textarea>
+        <small class="text-danger" [class.d-none]="Desc.valid || Desc.untouched">Ovo polje je obavezno.</small>
+      </div>
+    </div>
+
+    <div class="form-group row mt-1">
+      <div class="col">
+        <label for="profile_pic" class="form-label">Profilna Ikonica:</label>
+        <input type="file" id="profile_pic" [class.is-invalid]="badChosen" name="profile_pic" accept=".png, .jpg, .jpeg" (input)="fileChosen($event)" class="form-control">
+        <small class="text-danger" *ngIf="badChosen">Slika mora biti velicine 100x100px - 300x300px.</small>
+      </div>
+    </div>
+    <hr>
+
+    <input [disabled]="agencyForm.form.invalid || Confirm.value != pass.value || badChosen" type="submit" value="Registruj se" (click)="registerAgency()" class="btn btn-primary">
+    <small class="text-danger d-block" *ngIf="registerFail">Greška pri registraciji!</small>
+  </form>
+</div>
+<app-footer></app-footer>

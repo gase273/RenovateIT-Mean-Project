@@ -1,0 +1,171 @@
+<app-navbar></app-navbar>
+
+<div class="containter-fluid my-2" *ngIf="!isLoading">
+  <div class="row mt-2 mb-3 table-responsive no-gutters">
+    <div class="col-md-10 align-self-center">
+      <h3 class="text-center display-6">Svi Vaši radnici</h3>
+    </div>
+    <div class="col-md-2 align-self-center">
+      <button class="btn btn-primary my-1" data-toggle="modal" data-target="#addWorker" [disabled]="allMyWorkers.length == logged.allowedWorkers">Dodaj Novog Radnika</button>
+      <br>
+      <button class="btn btn-primary my-1" data-toggle="modal" data-target="#moreWorkers" [disabled]="allMyWorkers.length != logged.allowedWorkers">Zahtev za Radna Mesta</button>
+    </div>
+  </div>
+  <div class="row table-responsive no-gutters">
+    <div class="col">
+      <table class="table table-dark" *ngIf="allMyWorkers.length != 0">
+        <thead class="text-center">
+          <tr>
+            <th scope="col" class="text">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Broj telefona</th>
+            <th scope="col">Struka</th>
+            <th scope="col">Na Poslu</th>
+            <th scope="col" colspan="2">Opcije</th>
+          </tr>
+        </thead>
+        <tbody class="text-center">
+          <tr *ngFor="let w of allMyWorkers; let i = index" class="align-middle">
+            <th scope="row">{{i+1}}</th>
+            <td>{{w.firstName}}</td>
+            <td>{{w.lastName}}</td>
+            <td>{{w.phone}}</td>
+            <td>{{w.specialty}}</td>
+            <td>{{w.workingOn == -1 ? "Ne" : "Da"}}</td>
+            <td><button class="btn btn-outline-info" data-toggle="modal" data-target="#editWorker" (click)="fill(i)">Ažuriraj</button></td>
+            <td><button class="btn btn-outline-danger" (click)="removeWorker(w.workerId)">Obriši</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <h5 class="text-center" *ngIf="allMyWorkers.length == 0">Nemate nijednog radnika.</h5>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addWorker" tabindex="-1" role="dialog" aria-labelledby="addWorkerLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addWorkerLabel">Dodajte Radnika</h5>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #newForm="ngForm">
+          <label for="newFirstName" class="form-label">Ime:</label>
+          <input type="text" id="newFirstName" name="newFirstName" #NewFirstName="ngModel"
+            [class.is-invalid]="NewFirstName.invalid && NewFirstName.touched" [(ngModel)]="newFirstName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewFirstName.valid || NewFirstName.untouched">Ovo polje je obavezno.</small>
+          <label for="newLastName" class="form-label">Prezime:</label>
+          <input type="text" id="newLastName" name="newLastName" #NewLastName="ngModel"
+            [class.is-invalid]="NewLastName.invalid && NewLastName.touched" [(ngModel)]="newLastName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewLastName.valid || NewLastName.untouched">Ovo polje je obavezno.</small>
+          <label for="newEmail" class="form-label">Email:</label>
+          <input type="newEmail" id="newEmail" name="newEmail" #NewEmail="ngModel"
+            [class.is-invalid]="NewEmail.invalid && NewEmail.touched" [(ngModel)]="newEmail" class="form-control"
+            pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+          <div *ngIf="NewEmail.errors && (NewEmail.invalid && NewEmail.touched) ">
+            <small class="text-danger" *ngIf="NewEmail.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="NewEmail.errors['pattern']">Nije validan format mejla.</small>
+          </div>
+          <label for="newPhone" class="form-label">Broj Telefona:</label>
+          <input type="text" id="newPhone" name="newPhone" #NewPhone="ngModel"
+            [class.is-invalid]="NewPhone.invalid && NewPhone.touched" [(ngModel)]="newPhone" class="form-control"
+            pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+          <div *ngIf="NewPhone.errors && (NewPhone.invalid && NewPhone.touched) ">
+            <small class="text-danger" *ngIf="NewPhone.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="NewPhone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+          </div>
+          <label for="newSpecialty" class="form-label">Struka:</label>
+          <input type="text" id="newSpecialty" name="newSpecialty" #NewSpecialty="ngModel"
+            [class.is-invalid]="NewSpecialty.invalid && NewSpecialty.touched" [(ngModel)]="newSpecialty" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="NewSpecialty.valid || NewSpecialty.untouched">Ovo polje je obavezno.</small>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" [disabled]="newForm.form.invalid || newForm.submitted" (click)="addWorker(); newForm.resetForm()">Sačuvaj Radnika</button>
+        <small class="text-success d-block" *ngIf="newSuccess">Uspešno sačuvan radnik!</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="editWorker" tabindex="-1" role="dialog" aria-labelledby="editWorkerLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editWorkerLabel">Izmeni Radnika</h5>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <label for="editFirstName" class="form-label">Ime:</label>
+          <input type="text" id="editFirstName" name="editFirstName" #EditFirstName="ngModel"
+            [class.is-invalid]="EditFirstName.invalid && EditFirstName.touched" [(ngModel)]="editFirstName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditFirstName.valid || EditFirstName.untouched">Ovo polje je obavezno.</small>
+          <label for="editLastName" class="form-label">Prezime:</label>
+          <input type="text" id="editLastName" name="editLastName" #EditLastName="ngModel"
+            [class.is-invalid]="EditLastName.invalid && EditLastName.touched" [(ngModel)]="editLastName" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditLastName.valid || EditLastName.untouched">Ovo polje je obavezno.</small>
+          <label for="editEmail" class="form-label">Email:</label>
+          <input type="editEmail" id="editEmail" name="editEmail" #EditEmail="ngModel"
+            [class.is-invalid]="EditEmail.invalid && EditEmail.touched" [(ngModel)]="editEmail" class="form-control"
+            pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" required>
+          <div *ngIf="EditEmail.errors && (EditEmail.invalid && EditEmail.touched) ">
+            <small class="text-danger" *ngIf="EditEmail.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="EditEmail.errors['pattern']">Nije validan format mejla.</small>
+          </div>
+          <label for="editPhone" class="form-label">Broj Telefona:</label>
+          <input type="text" id="editPhone" name="editPhone" #EditPhone="ngModel"
+            [class.is-invalid]="EditPhone.invalid && EditPhone.touched" [(ngModel)]="editPhone" class="form-control"
+            pattern="^(\+)(3816)([0-9]){6,9}|(06)([0-9]){6,9}$" required>
+          <div *ngIf="EditPhone.errors && (EditPhone.invalid && EditPhone.touched) ">
+            <small class="text-danger" *ngIf="EditPhone.errors['required']">Ovo polje je obavezno.</small>
+            <small class="text-danger" *ngIf="EditPhone.errors['pattern']">Telefon se navodi u formatu 06 (ili +3816), zatim Vas broj bez razmaka ili crtica.</small>
+          </div>
+          <label for="editSpecialty" class="form-label">Struka:</label>
+          <input type="text" id="editSpecialty" name="editSpecialty" #EditSpecialty="ngModel"
+            [class.is-invalid]="EditSpecialty.invalid && EditSpecialty.touched" [(ngModel)]="editSpecialty" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="EditSpecialty.valid || EditSpecialty.untouched">Ovo polje je obavezno.</small>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" [disabled]="editForm.form.invalid || editForm.form.pristine || editForm.submitted" (click)="editWorker()">Sačuvaj Radnika</button>
+        <small class="text-success d-block" *ngIf="editSuccess">Uspešno sačuvan radnik!</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="moreWorkers" tabindex="-1" role="dialog" aria-labelledby="moreWorkersLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="moreWorkersLabel">Zahtev za Radna Mesta</h5>
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <label for="amount" class="form-label">Broj Mesta:</label>
+          <input type="number" id="amount" name="amount" #Amount="ngModel"
+            [class.is-invalid]="Amount.invalid && Amount.touched && amount <= 0" [(ngModel)]="amount" class="form-control" required>
+          <small class="text-danger d-block" [class.d-none]="Amount.valid || Amount.untouched">Ovo polje je obavezno.</small>
+          <small class="text-danger d-block" [class.d-none]="amount > 0 || Amount.untouched">Broj mesta je pozitivan broj.</small>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zatvori</button>
+        <button type="button" class="btn btn-primary" [disabled]="Amount.invalid || amount <= 0" (click)="sendRequest()">Pošalji zahtev</button>
+        <small class="text-success d-block" *ngIf="reqSuccess">Zahtev Poslat!</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

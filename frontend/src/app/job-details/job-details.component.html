@@ -1,0 +1,71 @@
+<app-navbar></app-navbar>
+<div class="container-fluid my-2" *ngIf="!isLoading">
+  <div class="col align-self-center my-4">
+    <h3 class="text-center display-6">Pregled posla</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h3 class="text-center">Podaci o klijentu</h3>
+      <p class="fs-4">Ime:&emsp;{{client.firstName}}</p>
+      <p class="fs-4">Prezime:&emsp;{{client.lastName}}</p>
+      <p class="fs-4">Broj Telefona:&emsp;{{client.phone}}</p>
+      <p class="fs-4">Email:&emsp;{{client.email}}</p>
+    </div>
+    <div class="col-md-4">
+      <h3 class="text-center">Podaci o Objektu</h3>
+      <p class="fs-4">Tip:&emsp;{{building.type == "house" ? "Kuća" : "Stan"}}</p>
+      <p class="fs-4">Adresa:&emsp;{{building.address}}</p>
+      <p class="fs-4">Kvadratura:&emsp;{{building.squares}}</p>
+      <p class="fs-4">Broj Prostorija:&emsp;{{building.rooms.length}}</p>
+    </div>
+    <div class="col-md-4 text-center" *ngIf="logged.type == 1">
+      <h3 class="text-center">Posao</h3>
+      <p class="fs-4">Rok:&emsp;{{myJob.deadline}}</p>
+      <p class="fs-4" *ngIf="myJob.status == 'agenFinished'">Čeka se plaćanje klijenta</p>
+      <div class="input-group my-2">
+        <select class="form-select" [(ngModel)]="selectedWorker">
+          <option *ngFor="let w of availWorkers" [ngValue]="w">{{w.firstName}}</option>
+        </select>
+        <input type="button" class="btn btn-outline-primary" value="Dodeli Radnika" (click)="assignWorker(selectedWorker)" [disabled]="assignedWorkers.length >= building.rooms.length">
+      </div>
+      <div class="input-group my-2">
+        <input class="form-control" disabled [value]="currentRoomIndex == -1 ? 'Niste izabrali nijednu sobu' : 'Izabrana soba ' + currentRoomIndex">
+        <input type="button" (click)="finishRoom()" class="btn btn-outline-success" value="Završetak Sobe" [disabled]="currentRoomIndex == -1 || building.rooms[currentRoomIndex].color != 'red'">
+      </div>
+
+    </div>
+    <div class="col-md-4 text-center" *ngIf="logged.type == 0">
+      <h3 class="text-center">Posao</h3>
+      <p class="fs-4">Rok:&emsp;{{myJob.deadline}}</p>
+      <div class="input-group">
+        <label for="cancel" class="form-label">Zahtev za otkazivanje posla</label>
+        <input type="text" class="form-control" name="cancel">
+        <input type="button" class="btn btn-outline-danger" value="Zahtevaj Otkazivanje" (click)="addRequest()">
+        <small class="text-success d-block" *ngIf="reqSuccess">Zahtev Poslat!</small>
+      </div>
+      <br>
+    </div>
+    <div class="col-md-4 text-center" *ngIf="logged.type == 2">
+      <h3 class="text-center">Posao</h3>
+      <p class="fs-4">Rok:&emsp;{{myJob.deadline}}</p>
+      <div class="text-center" *ngIf="hasRequest">
+        <h5>Postoji zahtev za otkazivanje posla zbog: {{request.reason}}</h5>
+        <button class="btn btn-outline-success me-2"(click)="acceptRequest()">Prihvati</button>
+        <button class="btn btn-outline-danger ms-2" (click)="refuseRequest()">Odbij</button>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+<div class="container-fluid my-2">
+  <div class="row">
+    <div class="col px-0 d-flex flex-column align-items-center overflow-auto">
+      <canvas id="canvasElement" width="640" height="480" [ngStyle]="{ 'background-color': 'white' }"
+      (click)="handleClick($event)"
+      ></canvas>
+
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

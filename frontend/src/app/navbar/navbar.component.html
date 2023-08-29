@@ -1,0 +1,50 @@
+<nav [class.navbar-expand]="!logged" [class.navbar-expand-lg]="logged" class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">
+      RestoreIT
+    </span>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div *ngIf="logged && logged.type == 0" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto mb-2 mb-lg-0">
+        <a [class.active]="route == '/client'" class="nav-item nav-link" routerLink="/client">Profil <span [class.d-none]="route != '/client'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/cliBuildings' || route == '/addBuilding' || route.split(';')[0] == '/editBuilding'" class="nav-item nav-link" routerLink="/cliBuildings">Objekti
+          <span [class.d-none]="route != '/cliBuildings' && route != '/addBuilding' && route.split(';')[0] != '/editBuilding'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/cliAgencies' || route.split(';')[0] == '/agencyDetails' || route.split(';')[0] == '/requestJob'" class="nav-item nav-link" routerLink="/cliAgencies">Agencije
+           <span [class.d-none]="route != '/cliAgencies' && route.split(';')[0] != '/agencyDetails' && route.split(';')[0] != '/requestJob'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/cliJobs' || route.split(';')[0] == '/jobDetails'" class="nav-item nav-link" routerLink="/cliJobs">Poslovi <span [class.d-none]="route != '/cliJobs' && route.split(';')[0] !='/jobDetails'" class="sr-only">(trenutno)</span></a>
+      </div>
+      <p class="navbar-text mb-0 me-2 d-inline-block">{{logged.username}}</p>
+      <button class="btn btn-outline-primary me-2" type="submit" (click)="logout()">Logout</button>
+      <button *ngIf="route =='/addBuilding' || route.split(';')[0] == '/editBuilding' || route.split(';')[0] == '/agencyDetails' || route.split(';')[0] == '/requestJob' || route.split(';')[0] == '/jobDetails'" (click)="back()" class="btn btn-outline-danger me-2">Back</button>
+    </div>
+    <div *ngIf="logged && logged.type == 1" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto mb-2 mb-lg-0">
+        <a [class.active]="route == '/agency'" class="nav-item nav-link" routerLink="/agency">Profil <span [class.d-none]="route != '/agency'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/agenWorkers'" class="nav-item nav-link" routerLink="/agenWorkers">Radnici <span [class.d-none]="route != '/agenWorkers'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/agenJobs' || route.split(';')[0] == '/reqDetails' || route.split(';')[0] == '/jobDetails'" class="nav-item nav-link" routerLink="/agenJobs">Poslovi <span [class.d-none]="route != '/agenJobs' && route.split(';')[0] != '/reqDetails' && route.split(';')[0] != '/jobDetails'" class="sr-only">(trenutno)</span></a>
+      </div>
+      <p class="navbar-text mb-0 me-2 d-inline-block">{{logged.username}}</p>
+      <button class="btn btn-outline-primary me-2" type="submit" (click)="logout()">Logout</button>
+      <button *ngIf="route.split(';')[0] == '/reqDetails' || route.split(';')[0] == '/jobDetails'" (click)="back()" class="btn btn-outline-danger me-2">Back</button>
+    </div>
+    <div *ngIf="logged && logged.type == 2" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav me-auto mb-2 mb-lg-0">
+        <a [class.active]="route == '/admin' || route.split(';')[0] == '/userDetails' || route == '/addClient' || route == '/addAgency'" class="nav-item nav-link" routerLink="/admin">Korisnici <span [class.d-none]="route != '/admin' && route.split(';')[0] != '/userDetails' && route != '/addClient' && route != '/addAgency'" class="sr-only">(trenutno)</span></a>
+        <a [class.active]="route == '/adminJobs'" class="nav-item nav-link" routerLink="/adminJobs">Poslovi <span [class.d-none]="route != '/adminJobs'" class="sr-only">(trenutno)</span></a>
+      </div>
+      <p class="navbar-text mb-0 me-2 d-inline-block">{{logged.username}}</p>
+      <button class="btn btn-outline-primary me-2" type="submit" (click)="logout()">Logout</button>
+      <button *ngIf="route.split(';')[0] == '/userDetails' || route == '/addClient' || route == '/addAgency' || route.split(';')[0] == '/jobDetails'" (click)="back()" class="btn btn-outline-danger me-2">Back</button>
+    </div>
+    <button *ngIf="!logged && route != '/login' && route != '/registerClient' && route != '/registerAgency' && route != '/reset'"
+          class="btn btn-outline-primary me-2" type="submit" routerLink="/login">Login</button>
+    <button *ngIf="route == '/login' || route == '/registerClient' || route == '/registerAgency' || route == '/reset'" (click)="back()" class="btn btn-outline-danger me-2">Back</button>
+  </div>
+
+</nav>
+

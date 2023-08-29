@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<div class="containter my-3 w-75 mx-auto" *ngIf="!isLoading">
+  <div class="row mb-2">
+    <div class="col">
+      <h3 class="text-center display-6">Stvaranje zahteva za saradnju sa agencijom</h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <label for="select" class="text-info form-label h5">Izaberite objekat za renoviranje:</label>
+      <select class="form-select form-select-lg" [(ngModel)]="selectedBuild" id="select" name="select">
+        <option *ngFor="let b of allClientBuilds" [ngValue]="b.buildId">{{b.address}}</option>
+      </select>
+    </div>
+    <div class="col-md-4 align-self-center">
+      <label for="date" class="text-info form-label h5">Unesite rok završetka renoviranja:</label>
+      <input type="text" class="form-control form-control-lg" id="date" #Date = "ngModel" [(ngModel)]="date" name="date"
+        [class.is-invalid]="Date.invalid && Date.touched" required
+        pattern="(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})">
+      <div *ngIf="Date.errors && (Date.invalid && Date.touched)">
+        <small class="text-danger" *ngIf="Date.errors['required']">Ovo polje je obavezno.</small>
+        <small class="text-danger" *ngIf="Date.errors['pattern']">Datum mora biti formata dd/mm/gggg ili dd-mm-gggg ili dd.mm.gggg, sa ili bez vodećih nula. </small>
+      </div>
+    </div>
+    <div class="col-md-4 align-self-center">
+      <label class="text-dark d-block form-label h5" for="align">easter egg: 2020/0386</label>
+      <input type="button" class="btn btn-success btn-lg" id="align" value="Zatraži saradnju" (click)="requestJob()">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-center">
+      <small class="text-success" [class.d-none]="!jobSuccess">Zahtev za saradnju sačuvan!</small>
+    </div>
+  </div>
+</div>
+
+
+<app-footer></app-footer>

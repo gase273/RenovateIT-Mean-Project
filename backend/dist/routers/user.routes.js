@@ -1,0 +1,34 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const user_controller_1 = require("../controllers/user.controller");
+const userRouter = express_1.default.Router();
+const upload = require("../middleware/fileuploader");
+userRouter.route('/login').post((req, res) => new user_controller_1.UserController().login(req, res));
+userRouter.route('/registerClient').post(upload.single("profile_pic"), (req, res) => new user_controller_1.UserController().registerClient(req, res));
+userRouter.route('/addClient').post(upload.single("profile_pic"), (req, res) => new user_controller_1.UserController().addClient(req, res));
+userRouter.route('/fetchUsers').get((req, res) => new user_controller_1.UserController().fetchAllUsers(req, res));
+userRouter.route('/registerAgency').post(upload.single("profile_pic"), (req, res) => new user_controller_1.UserController().registerAgency(req, res));
+userRouter.route('/addAgency').post(upload.single("profile_pic"), (req, res) => new user_controller_1.UserController().addAgency(req, res));
+userRouter.route('/editClient').post((req, res) => new user_controller_1.UserController().editClient(req, res));
+userRouter.route('/editAgency').post((req, res) => new user_controller_1.UserController().editAgency(req, res));
+userRouter.route('/editPass').post((req, res) => new user_controller_1.UserController().editPass(req, res));
+userRouter.route('/editImg').post(upload.single("profile_pic"), (req, res) => new user_controller_1.UserController().editImg(req, res));
+userRouter.route('/resetPass').post((req, res) => new user_controller_1.UserController().resetPass(req, res));
+userRouter.route('/getAllAgencies').get((req, res) => new user_controller_1.UserController().getAllAgencies(req, res));
+userRouter.route('/getUser').get((req, res) => new user_controller_1.UserController().getUser(req, res));
+userRouter.route('/getReviews').post((req, res) => new user_controller_1.UserController().getUserReviews(req, res));
+userRouter.route('/leaveReview').post((req, res) => new user_controller_1.UserController().leaveReview(req, res));
+userRouter.route('/leaveReview').post((req, res) => new user_controller_1.UserController().leaveReview(req, res));
+userRouter.route('/updateReview').post((req, res) => new user_controller_1.UserController().updateReview(req, res));
+userRouter.route('/setStatus').post((req, res) => new user_controller_1.UserController().setUserStatus(req, res));
+userRouter.route('/fetchNoAdmin').get((req, res) => new user_controller_1.UserController().fetchAllButAdmin(req, res));
+userRouter.route('/delUser').post((req, res) => new user_controller_1.UserController().delUser(req, res));
+userRouter.route('/incWorkers').post((req, res) => new user_controller_1.UserController().incWorkersNum(req, res));
+userRouter.route('/setWorkers').post((req, res) => new user_controller_1.UserController().setWorkersNum(req, res));
+userRouter.route('/delReview').post((req, res) => new user_controller_1.UserController().deleteReview(req, res));
+exports.default = userRouter;
+//# sourceMappingURL=user.routes.js.map
